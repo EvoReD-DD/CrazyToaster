@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class HeatTost : MonoBehaviour
 {
+    #region Serialize
     [SerializeField] private GameObject _toast1;
     [SerializeField] private GameObject _toast2;
     [SerializeField] private GameObject _armFryst;
@@ -14,18 +15,21 @@ public class HeatTost : MonoBehaviour
     [SerializeField] private Renderer _toastHeatColor2;
     [SerializeField] private Text _needHoldToDone;
     [SerializeField] private Text _doneTime;
+    #endregion
+    #region Variables
+    public static bool _done = false;
     private Rigidbody _rb1;
     private Rigidbody _rb2;
     private Transform _arm;
-    private float _force;
-    private float _forceBad;
+    private float _force= 0.2f;
+    private float _forceRight = 0.05f;
     private float _t = 0f;
     private int _defaultHoldTime = 2;
     private int _maximumHoldTime = 5;
     private float _accuracy = 0.3f;
     private bool _needSetTime = true;
     private float _reset = 0;
-
+    #endregion
     private void Start()
     {
         _arm = _armFryst.GetComponent<Transform>();
@@ -58,15 +62,15 @@ public class HeatTost : MonoBehaviour
         float roundTime = Mathf.Round(_t);
         if (roundTime == Convert.ToInt32(_doneTime.text))
         {
-            Debug.Log("WIN");
             _t = _reset;
-            ToastPushDone();
+            _done = true;
+            ToastPush();
         }
-        else 
+        else
         {
-            Debug.Log("Lose");
-            ToastPushBad();
             _t = _reset;
+            _done = false;
+            ToastPush();
         }
     }
     private string SetNeedTimeHold()
@@ -75,25 +79,15 @@ public class HeatTost : MonoBehaviour
         _needSetTime = false;
         return _doneTime.text;
     }
-    
-    private void ToastPushDone()
+    private void ToastPush()
     {
-        _force = UnityEngine.Random.Range(1.5f, 3f);
         _rb1.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        _rb1.AddTorque(Vector3.right * _force);
-        _rb1.AddTorque(Vector3.back * _force);
         _rb2.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        _rb2.AddTorque(Vector3.right * _force);
-        _rb2.AddTorque(Vector3.forward * _force);
+        Invoke("ForceRight", 0.2f);
     }
-    private void ToastPushBad()
+    private void ForceRight()
     {
-        _forceBad = UnityEngine.Random.Range(2f, 5f);
-        _rb1.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        _rb1.AddTorque(Vector3.right * _force);
-        _rb1.AddTorque(Vector3.back * _force);
-        _rb2.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        _rb2.AddTorque(Vector3.right * _force);
-        _rb2.AddTorque(Vector3.forward * _force);
+        _rb1.AddForce(Vector3.right * _forceRight, ForceMode.Impulse);
+        _rb2.AddForce(Vector3.right * _forceRight, ForceMode.Impulse);
     }
 }
