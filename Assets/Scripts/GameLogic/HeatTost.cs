@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class HeatTost : MonoBehaviour
 {
-    #region Serialize
+    #region Serialize variables
     [SerializeField] private GameObject _toast1;
     [SerializeField] private GameObject _toast2;
     [SerializeField] private GameObject _armFryst;
@@ -15,20 +15,22 @@ public class HeatTost : MonoBehaviour
     [SerializeField] private Renderer _toastHeatColor2;
     [SerializeField] private Text _needHoldToDone;
     [SerializeField] private Text _doneTime;
+    [SerializeField] private ThiefAI _thief;
+    [SerializeField] private Animator _toasterVibrant;
     #endregion
     #region Variables
     public static bool _done = false;
     private Rigidbody _rb1;
     private Rigidbody _rb2;
     private Transform _arm;
-    private float _force= 0.2f;
-    private float _forceRight = 0.05f;
+    private float _force= 1.6f;
+    private float _forceRight = 1.7f;
     private float _t = 0f;
-    private int _defaultHoldTime = 2;
-    private int _maximumHoldTime = 5;
-    private float _accuracy = 0.3f;
+    private int _defaultHoldTime = 1;
+    private int _maximumHoldTime = 3;
     private bool _needSetTime = true;
     private float _reset = 0;
+    private bool _pushOn = false;
     #endregion
     private void Start()
     {
@@ -41,10 +43,6 @@ public class HeatTost : MonoBehaviour
     }
     private void OnMouseDrag()
     {
-        if (_needSetTime)
-        {
-            _doneTime.text = SetNeedTimeHold();
-        }
         _needHoldToDone.text = Convert.ToString(_t);
         _t += Time.deltaTime;
         _arm.localPosition = _activeArm;
@@ -55,7 +53,19 @@ public class HeatTost : MonoBehaviour
     {
         _arm.localPosition = _deactiveArm;
         _needSetTime = true;
+        _toasterVibrant.SetTrigger("Vibrant");
         CheckDoneTime();
+        if (_needSetTime)
+        {
+            _doneTime.text = SetNeedTimeHold();
+        }
+    }
+    private void FixedUpdate()
+    {
+        if (_pushOn)
+        {
+            ToastPush();
+        }
     }
     private void CheckDoneTime()
     {
@@ -64,13 +74,13 @@ public class HeatTost : MonoBehaviour
         {
             _t = _reset;
             _done = true;
-            ToastPush();
+            StartCoroutine(DelayPush());
         }
         else
         {
             _t = _reset;
             _done = false;
-            ToastPush();
+            StartCoroutine(DelayPush());
         }
     }
     private string SetNeedTimeHold()
@@ -79,15 +89,22 @@ public class HeatTost : MonoBehaviour
         _needSetTime = false;
         return _doneTime.text;
     }
+    private IEnumerator DelayPush()
+    {
+        _pushOn = true;
+        yield return new WaitForSeconds(0.05f);
+        _pushOn = false;
+    }
+    
     private void ToastPush()
     {
         _rb1.AddForce(Vector3.up * _force, ForceMode.Impulse);
         _rb2.AddForce(Vector3.up * _force, ForceMode.Impulse);
-        Invoke("ForceRight", 0.2f);
+        Invoke("AddTorque", 0.2f);
     }
-    private void ForceRight()
+    private void AddTorque()
     {
-        _rb1.AddForce(Vector3.right * _forceRight, ForceMode.Impulse);
-        _rb2.AddForce(Vector3.right * _forceRight, ForceMode.Impulse);
+        _rb1.AddTorque(Vector3.right * _forceRight, ForceMode.Impulse);
+        _rb2.AddTorque(Vector3.right * _forceRight, ForceMode.Impulse);
     }
 }

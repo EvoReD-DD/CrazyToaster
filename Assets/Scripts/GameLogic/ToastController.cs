@@ -10,9 +10,13 @@ public class ToastController : MonoBehaviour
     [SerializeField] private Text _nextlvl;
     [SerializeField] private Image fillprogress;
     [SerializeField] private GameObject _menu;
+    [SerializeField] private GameObject _plateToasts;
+    [SerializeField] private Animator _winAnim;
+    [SerializeField] private ThiefAI _thief;
     private Vector3 _startPositionToast;
     private Quaternion _startRotation;
     private Renderer _rend;
+    private int _lvlStep = 1;
 
     private void Start()
     {
@@ -21,10 +25,15 @@ public class ToastController : MonoBehaviour
         _rend = this.GetComponent<Renderer>();
         _needCountToasts.text = SaveData._countsToasts;
     }
+    private void Update()
+    {
+       
+    }
     private void OnMouseDown()
     {
         PositionReset();
         IncreaseCountToasts();
+        _plateToasts.SetActive(true);
     }
     private void IncreaseCountToasts()
     {
@@ -32,20 +41,28 @@ public class ToastController : MonoBehaviour
         {
             int _toastCount = Convert.ToInt32(_countDoneToasts.text);
             _toastCount += 1;
+            if (_toastCount % 2 == 0)
+            {
+                _thief.StartThief();
+            }
             fillprogress.fillAmount = (float)Convert.ToInt32(_countDoneToasts.text) / Convert.ToInt32(_needCountToasts.text);
             _countDoneToasts.text = Convert.ToString(_toastCount);
             CheckWin();
         }
-        
     }
     private void CheckWin()
     {
         if (Convert.ToInt32(_needCountToasts.text) == Convert.ToInt32(_countDoneToasts.text))
         {
-            _currentlvl.text = Convert.ToString(Convert.ToInt32(_currentlvl.text) + 1);
-            _nextlvl.text = Convert.ToString(Convert.ToInt32(_nextlvl.text) + 1);
+            _currentlvl.text = Convert.ToString(Convert.ToInt32(_currentlvl.text) + _lvlStep);
+            _nextlvl.text = Convert.ToString(Convert.ToInt32(_nextlvl.text) + _lvlStep);
             fillprogress.fillAmount = 0;
             _countDoneToasts.text = "0";
+            _winAnim.SetTrigger("Win");
+            if ((Convert.ToInt32(_currentlvl) % 2) == 0)
+            {
+                AdsCore.ShowAdsVideo("Interstitial_Android");
+            }
             _menu.SetActive(true);
         }
     }
