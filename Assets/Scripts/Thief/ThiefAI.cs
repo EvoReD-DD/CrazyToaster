@@ -15,6 +15,7 @@ public class ThiefAI : MonoBehaviour
     [SerializeField] private Vector3 _startPosition;
     [SerializeField] private Button _buttonCatch;
     [SerializeField] private Text _countDoneToasts;
+    [SerializeField] private AudioManager _audio;
     private float _step;
     private bool _run = false;
     private int _count;
@@ -32,6 +33,7 @@ public class ThiefAI : MonoBehaviour
     {
         if (_once)
         {
+            _audio.StartThief();
             StartCoroutine(StartAnimations());
         }
     }

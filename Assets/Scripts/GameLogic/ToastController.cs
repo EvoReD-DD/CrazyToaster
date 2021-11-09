@@ -13,7 +13,6 @@ public class ToastController : MonoBehaviour
     [SerializeField] private GameObject _plateToasts;
     [SerializeField] private Animator _winAnim;
     [SerializeField] private ThiefAI _thief;
-    [SerializeField] private AudioManager _audio;
     private Vector3 _startPositionToast;
     private Quaternion _startRotation;
     private Renderer _rend;
@@ -39,7 +38,6 @@ public class ToastController : MonoBehaviour
             _toastCount += 1;
             if (_toastCount % 2 == 0)
             {
-                _audio.StartThief();
                 _thief.StartThief();
             }
             fillprogress.fillAmount = (float)Convert.ToInt32(_countDoneToasts.text) / Convert.ToInt32(_needCountToasts.text);

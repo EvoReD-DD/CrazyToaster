@@ -6,13 +6,14 @@ public class AudioManager : MonoBehaviour
 {
     [SerializeField] private AudioClip _afterToasts;
     [SerializeField] private AudioClip _beforeToast;
+    [SerializeField] private AudioClip _startThief;
     [SerializeField] private AudioClip _catchThief;
     [SerializeField] private AudioSource _source;
     [SerializeField] private AudioClip _click;
 
     public void StartThief()
     {
-        
+        _source.PlayOneShot(_startThief);
     }
     public void CatchThief()
     {

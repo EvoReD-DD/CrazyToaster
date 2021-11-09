@@ -23,7 +23,7 @@ public class HeatTost : MonoBehaviour
     private Rigidbody _rb1;
     private Rigidbody _rb2;
     private Transform _arm;
-    private float _force= 1.6f;
+    private float _force = 1.6f;
     private float _forceRight = 1.7f;
     private float _t = 0f;
     private int _defaultHoldTime = 1;
@@ -31,6 +31,7 @@ public class HeatTost : MonoBehaviour
     private bool _needSetTime = true;
     private float _reset = 0;
     private bool _pushOn = false;
+    private bool _once = true;
     #endregion
     private void Start()
     {
@@ -43,7 +44,11 @@ public class HeatTost : MonoBehaviour
     }
     private void OnMouseDrag()
     {
-        _audio.ClickStartToaster();
+        if (_once)
+        {
+            _once = false;
+            _audio.ClickStartToaster();
+        }
         _needHoldToDone.text = Convert.ToString(_t);
         _t += Time.deltaTime;
         _arm.localPosition = _activeArm;
@@ -52,6 +57,7 @@ public class HeatTost : MonoBehaviour
     }
     private void OnMouseUp()
     {
+        _once = true;
         _arm.localPosition = _deactiveArm;
         _needSetTime = true;
         _toasterVibrant.SetTrigger("Vibrant");
@@ -91,13 +97,18 @@ public class HeatTost : MonoBehaviour
         _needSetTime = false;
         return _doneTime.text;
     }
+    private IEnumerator CheckOnce()
+    {
+        yield return new WaitForSeconds(0.5f);
+        _once = true;
+    }
     private IEnumerator DelayPush()
     {
         _pushOn = true;
         yield return new WaitForSeconds(0.05f);
         _pushOn = false;
     }
-    
+
     private void ToastPush()
     {
         _rb1.AddForce(Vector3.up * _force, ForceMode.Impulse);

@@ -2115,7 +2115,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: beb58d5df301bd240a360aa7154e2513, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMode: 1
+  testMode: 0
   _noAds: {fileID: 1531844283}
 --- !u!1 &1351607328
 GameObject:
@@ -3037,6 +3037,7 @@ MonoBehaviour:
   _startPosition: {x: -0.102, y: 0, z: -0.63}
   _buttonCatch: {fileID: 334418332}
   _countDoneToasts: {fileID: 1368360688}
+  _audio: {fileID: 1702713613}
 --- !u!95 &1501008000
 Animator:
   serializedVersion: 3
@@ -3482,7 +3483,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: 5175de53b4ff1714f94ab9593268ff69, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 1
+  m_Volume: 0.827
   m_Pitch: 1
   Loop: 0
   Mute: 0
@@ -3594,6 +3595,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _afterToasts: {fileID: 8300000, guid: d1701646d36230147a6a1eb63236d0e0, type: 3}
   _beforeToast: {fileID: 8300000, guid: 8bc59ba02c767c9438ce0b8b5abed995, type: 3}
+  _startThief: {fileID: 8300000, guid: e92fa7354e196564f928aa4dfd1a1ad0, type: 3}
   _catchThief: {fileID: 8300000, guid: ca6cea86be86cde49b1e461c685affd0, type: 3}
   _source: {fileID: 1702713611}
   _click: {fileID: 8300000, guid: 26fa25138ec61f647b6a034df9ab1367, type: 3}
