@@ -13,6 +13,7 @@ public class ToastController : MonoBehaviour
     [SerializeField] private GameObject _plateToasts;
     [SerializeField] private Animator _winAnim;
     [SerializeField] private ThiefAI _thief;
+    [SerializeField] private AudioManager _audio;
     private Vector3 _startPositionToast;
     private Quaternion _startRotation;
     private Renderer _rend;
@@ -23,11 +24,6 @@ public class ToastController : MonoBehaviour
         _startPositionToast = this.transform.position;
         _startRotation = this.transform.rotation;
         _rend = this.GetComponent<Renderer>();
-        _needCountToasts.text = SaveData._countsToasts;
-    }
-    private void Update()
-    {
-       
     }
     private void OnMouseDown()
     {
@@ -43,6 +39,7 @@ public class ToastController : MonoBehaviour
             _toastCount += 1;
             if (_toastCount % 2 == 0)
             {
+                _audio.StartThief();
                 _thief.StartThief();
             }
             fillprogress.fillAmount = (float)Convert.ToInt32(_countDoneToasts.text) / Convert.ToInt32(_needCountToasts.text);
@@ -59,7 +56,7 @@ public class ToastController : MonoBehaviour
             fillprogress.fillAmount = 0;
             _countDoneToasts.text = "0";
             _winAnim.SetTrigger("Win");
-            if ((Convert.ToInt32(_currentlvl) % 2) == 0)
+            if ((Convert.ToInt32(_currentlvl.text) % 2) == 0)
             {
                 AdsCore.ShowAdsVideo("Interstitial_Android");
             }

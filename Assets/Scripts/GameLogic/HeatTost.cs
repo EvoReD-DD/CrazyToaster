@@ -15,8 +15,8 @@ public class HeatTost : MonoBehaviour
     [SerializeField] private Renderer _toastHeatColor2;
     [SerializeField] private Text _needHoldToDone;
     [SerializeField] private Text _doneTime;
-    [SerializeField] private ThiefAI _thief;
     [SerializeField] private Animator _toasterVibrant;
+    [SerializeField] private AudioManager _audio;
     #endregion
     #region Variables
     public static bool _done = false;
@@ -43,6 +43,7 @@ public class HeatTost : MonoBehaviour
     }
     private void OnMouseDrag()
     {
+        _audio.ClickStartToaster();
         _needHoldToDone.text = Convert.ToString(_t);
         _t += Time.deltaTime;
         _arm.localPosition = _activeArm;
@@ -54,6 +55,7 @@ public class HeatTost : MonoBehaviour
         _arm.localPosition = _deactiveArm;
         _needSetTime = true;
         _toasterVibrant.SetTrigger("Vibrant");
+        _audio.StopToaster();
         CheckDoneTime();
         if (_needSetTime)
         {
